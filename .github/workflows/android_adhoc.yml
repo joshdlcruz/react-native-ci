@@ -30,11 +30,11 @@ jobs:
           KEYSTORE_ALIAS_PASSPHRASE: ${{ secrets.STAGING_KEYSTORE_ALIAS_PASSPHRASE }}
           KEYSTORE_ALIAS: ${{ secrets.STAGING_KEYSTORE_ALIAS }}
           KEYSTORE_PASSPHRASE: ${{ secrets.STAGING_KEYSTORE_PASSPHRASE }}
+          KEYSTORE: ${{ secrets.STAGING_KEYSTORE }}
         run: |
           export VERSION_CODE=${{ github.run_number }}
           export VERSION_NAME=1.0.${{ github.run_number }}
-          export KEYSTORE = ${{ secrets.STAGING_KEYSTORE }}
-          echo $KEYSTORE | base64 -decode > android/app/staging.keystore
+          echo $KEYSTORE | base64 --decode > android/app/staging.keystore
           cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleStaging
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
