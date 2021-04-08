@@ -26,21 +26,14 @@ jobs:
       - name: Building bundle
         run: |
           yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
-      - name: Build android
-        env:
-          KEYSTORE_ALIAS_PASSPHRASE: ${{ secrets.STAGING_KEYSTORE_ALIAS_PASSPHRASE }}
-          KEYSTORE_ALIAS: ${{ secrets.STAGING_KEYSTORE_ALIAS }}
-          KEYSTORE_PASSPHRASE: ${{ secrets.STAGING_KEYSTORE_PASSPHRASE }}
+      - name: Build Android Release
         run: |
-          export VERSION_CODE=${{ github.run_number }}
-          export VERSION_NAME=1.0.${{ github.run_number }}
-          echo ${{ secrets.STAGING_KEYSTORE }} | base64 -d > android/app/staging.keystore
-          cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleStaging
+          cd android && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: android/app/build/outputs/apk/staging/app-staging.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
   upload-android:
     needs: build-android-adhoc
