@@ -33,7 +33,8 @@ jobs:
         run: |
           export VERSION_CODE=${{ github.run_number }}
           export VERSION_NAME=1.0.${{ github.run_number }}
-          echo ${{ secrets.STAGING_KEYSTORE }} | base64 -d > android/app/staging.keystore
+          export KEYSTORE = ${{ secrets.STAGING_KEYSTORE }}
+          echo $KEYSTORE | base64 -decode > android/app/staging.keystore
           cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleStaging
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
